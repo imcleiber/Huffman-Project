@@ -9,26 +9,26 @@
     #define MAX 256
     #define ALTURA_MAX 31
 
-    typedef struct NO{
+    typedef struct NO {
         void *item;
         int frequencia;
         struct NO *prox;
         struct NO *esq;
         struct NO *dir;
-    }NO;
+    } NO;
 
-    typedef struct FILA{
+    typedef struct FILA {
         struct NO *cabeca;
-    }FILA;
+    } FILA;
 
-    typedef struct ELEMENTO{
+    typedef struct ELEMENTO {
         char caminho[ALTURA_MAX]; //ALTURA_MAX = 31 = altura máxima
         long long int frequencia;
-    }ELEMENTO;
+    } ELEMENTO;
 
-    typedef struct HT{
+    typedef struct HT {
         ELEMENTO* tabela[MAX]; //Numero de elementos na tabela ASCII
-    }HT;
+    } HT;
 
     //Criar um NO com seu respectivo item e frequencia.
     NO* criar_no(unsigned char item, int frequencia);

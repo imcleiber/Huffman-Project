@@ -5,7 +5,7 @@ void compactar()
 {
     char nome_do_arquivo[100], caminho[ALTURA_MAX];
     int inteiro, auxiliar;
-    unsigned short lixo, tamanho=0; //referencia para uso binario.
+    unsigned short lixo, tamanho = 0; //referencia para uso binario.
 
     printf("\nDigite o nome do arquivo a ser compactado:\n");
     scanf("%s", nome_do_arquivo);
@@ -46,7 +46,7 @@ void compactar()
     *nome_do_arquivo = *strcat(nome_do_arquivo, ".huff");
     FILE *saida = fopen(nome_do_arquivo, "wb"); //criacao e abertura do arquivo de saida em binario.
 
-    auxiliar = inteiro>>8; //colocacao do caractere inteiro deslocando em um byte.
+    auxiliar = inteiro >> 8; //colocacao do caractere inteiro deslocando em um byte.
     fputc(auxiliar, saida);//No final do arquivo.
     fputc(inteiro, saida);
     imprimir_pre_ordem(saida, arvore);//impressao da arvore.
