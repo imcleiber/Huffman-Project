@@ -2,7 +2,22 @@
 
 //.............................FILA.............................//
 
-NO* criar_no(unsigned char item, int frequencia)//utilizado na criacao da arvore de huffman.
+
+/**
+ * @brief Cria uma struct NO (ADT) e retorna seu endereço. 
+ * 
+ * A função criar_no() aloca um espaço em memória para um NO,
+ * e inicializa seus elementos. Atribuindo os valores item e frequencia
+ * recebidos como parâmetros para os campos item e frequencia do NO.
+ * Atribui NULL para os demais campos, prox, esq, e dir.
+ * Retorna o ponteiro para o NO criado. 
+ * 
+ * @param   item            Dado a ser armazenado no NO
+ * @param   frequencia      Frequência desse dado 
+ * 
+ * @return  NO*             Ponteiro para o NO criado
+ */
+NO* criar_no(unsigned char item, int frequencia) //utilizado na criacao da arvore de huffman.
 {
     NO *novo_no = (NO*) malloc(sizeof(NO));
     novo_no->item = item;
@@ -13,6 +28,15 @@ NO* criar_no(unsigned char item, int frequencia)//utilizado na criacao da arvore
     return novo_no;
 }
 
+/**
+ * @brief Cria uma fila de prioridade vazia (ADT)
+ * 
+ * A função criar_fila() aloca um espaço em memória para uma FILA,
+ * e inicializa o campo 'cabeca' atribuindo o valor NULL.
+ * Retorna o ponteiro para a FILA criada.
+ * 
+ * @return   FILA*    Ponteiro para a fila criada.
+ */
 FILA* criar_fila()
 {
     FILA *nova_fila = (FILA*) malloc(sizeof(FILA));
@@ -22,7 +46,7 @@ FILA* criar_fila()
 
 void enfileirar(FILA *fila, NO *no)
 {
-    if((fila->cabeca==NULL) || ( no->frequencia <= (fila->cabeca->frequencia)))
+    if((fila->cabeca == NULL) || (no->frequencia <= (fila->cabeca->frequencia)))
     {
         no->prox = fila->cabeca;
         fila->cabeca = no;
@@ -30,7 +54,7 @@ void enfileirar(FILA *fila, NO *no)
     else
     {
         NO *auxiliar = fila->cabeca;
-        while ((auxiliar->prox != NULL) && ( auxiliar->prox->frequencia < no->frequencia))
+        while ((auxiliar->prox != NULL) && (auxiliar->prox->frequencia < no->frequencia))
         {
             auxiliar = auxiliar->prox;
         }
@@ -78,7 +102,7 @@ void criar_arvore_huffman(FILA *fila) // construcao da arvore com o uso da fila 
         NO *no_2 = desenfileirar(fila);
         NO *novo_no = (NO*) malloc(sizeof(NO));
 
-        novo_no->item = '*';//escape *.
+        novo_no->item = '*'; //escape *.
         novo_no->frequencia = (no_1->frequencia + no_2->frequencia);
         novo_no->esq = no_1;
         novo_no->dir = no_2;
@@ -226,8 +250,8 @@ void imprimir_bits(FILE *entrada, FILE *saida, HT *ht)//impressao da codificacao
             if(contador == 8)
             {
                 fputc(opcao, saida);
-                contador=0;
-                opcao=0;
+                contador = 0;
+                opcao = 0;
             }
         }
     }

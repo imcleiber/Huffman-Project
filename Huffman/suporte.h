@@ -30,10 +30,18 @@
         ELEMENTO* tabela[MAX]; //Numero de elementos na tabela ASCII
     } HT;
 
-    //Criar um NO com seu respectivo item e frequencia.
+    
     NO* criar_no(unsigned char item, int frequencia);
 
-    //Criar uma fila vazia.
+    /**
+     * @brief Cria uma fila de prioridade vazia (ADT).
+     * 
+     * A função criar_fila() aloca um espaço em memória para uma FILA,
+     * e inicializa o campo 'cabeca' atribuindo o valor NULL.
+     * Retorna o ponteiro para a FILA criada.
+     * 
+     * @return   FILA*    Ponteiro para a fila criada.
+     */
     FILA* criar_fila(); 
 
     //Adiciona um NO na fila.
@@ -88,7 +96,7 @@
     void descompactar();
 
     //Realiza a descompressão propriamente dita.
-    int descompressao(FILE *compactado, char *nome);
+    int descompressao(FILE *compactado);
 
     //Monta a árvore a partir do arquivo compactado.
     NO *montagem_arvore(FILE *compactado);

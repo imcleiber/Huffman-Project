@@ -3,16 +3,30 @@
 #define BYTE_SIZE 8
 #define HUFF_GARBAGE 3
 
+
+/**
+ * Funcao que realiza procedimentos para descompactacao de um arquivo
+ * 
+ */
 void descompactar()
 {
     char nomedoarquivo[50];
     printf("Entre com o nome do arquivo que deseja descompactar: ");
     scanf("%s", nomedoarquivo);
     FILE *compactado = fopen(nomedoarquivo, "rb"); // Apenas leitura do arquivo em binário.
-    descompressao(compactado, nomedoarquivo);
+    descompressao(compactado);
 }
 
-int descompressao(FILE *compactado, char *nome)
+/**
+ * @brief Funcao que realiza a descompressão de um arquivo.
+ * 
+ * A funcao descompressao() receberá como parametro um ponteiro para um arquivo compactado
+ * e irá realizar o processo de descompactação de Huffman, gerando um novo arquivo descompactado
+ * com o nome informado.
+ * 
+ * @param   compactado  Um ponteiro para um arquivo compactado.
+ */
+int descompressao(FILE *compactado)
 {
 	int tamanho_arquivo = 0;
 	short tamanho_lixo, tamanho_arvore = 8191; // Valor máximo de 1 byte "11111111". 
@@ -48,7 +62,13 @@ int descompressao(FILE *compactado, char *nome)
 
 }
 
-NO *montagem_arvore(FILE *compactado) //Reconstruir a árvore de huffman do arquivo compactado
+/**
+ * @brief Função que reconstrói a árvore de huffman do arquivo compactado
+ * 
+ * @param   compactado 
+ * @return  NO* 
+ */
+NO *montagem_arvore(FILE *compactado) 
 {
 	unsigned char atual;
     NO *novo_no;
@@ -72,6 +92,12 @@ NO *montagem_arvore(FILE *compactado) //Reconstruir a árvore de huffman do arqu
     return novo_no;
 }
 
+/**
+ * @brief 
+ * 
+ * @param caractere 
+ * @return NO* 
+ */
 NO *criar_no_arvore(unsigned char caractere)
 {
 	unsigned char *aux = (unsigned char *)malloc(sizeof(unsigned char));
@@ -85,6 +111,16 @@ NO *criar_no_arvore(unsigned char caractere)
     return novo_no;
 }
 
+/**
+ * @brief 
+ * 
+ * @param   compactado          
+ * @param   descompactado       
+ * @param   raiz                
+ * @param   tamanho_arvore      
+ * @param   tamanho_lixo        
+ * @param   tamanho_arquivo     
+ */
 void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz,
     short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo) //Escreve o arquivo descompactado
 {
