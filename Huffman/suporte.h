@@ -9,31 +9,39 @@
     #define MAX 256
     #define ALTURA_MAX 31
 
-    typedef struct NO{
+    typedef struct NO {
         void *item;
         int frequencia;
         struct NO *prox;
         struct NO *esq;
         struct NO *dir;
-    }NO;
+    } NO;
 
-    typedef struct FILA{
+    typedef struct FILA {
         struct NO *cabeca;
-    }FILA;
+    } FILA;
 
-    typedef struct ELEMENTO{
+    typedef struct ELEMENTO {
         char caminho[ALTURA_MAX]; //ALTURA_MAX = 31 = altura máxima
         long long int frequencia;
-    }ELEMENTO;
+    } ELEMENTO;
 
-    typedef struct HT{
+    typedef struct HT {
         ELEMENTO* tabela[MAX]; //Numero de elementos na tabela ASCII
-    }HT;
+    } HT;
 
-    //Criar um NO com seu respectivo item e frequencia.
+    
     NO* criar_no(unsigned char item, int frequencia);
 
-    //Criar uma fila vazia.
+    /**
+     * @brief Cria uma fila de prioridade vazia (ADT).
+     * 
+     * A função criar_fila() aloca um espaço em memória para uma FILA,
+     * e inicializa o campo 'cabeca' atribuindo o valor NULL.
+     * Retorna o ponteiro para a FILA criada.
+     * 
+     * @return   FILA*    Ponteiro para a fila criada.
+     */
     FILA* criar_fila(); 
 
     //Adiciona um NO na fila.
@@ -88,7 +96,7 @@
     void descompactar();
 
     //Realiza a descompressão propriamente dita.
-    int descompressao(FILE *compactado, char *nome);
+    int descompressao(FILE *compactado);
 
     //Monta a árvore a partir do arquivo compactado.
     NO *montagem_arvore(FILE *compactado);

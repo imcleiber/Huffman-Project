@@ -1,18 +1,35 @@
 #include "descompactar.h"
 
+#define BYTE_SIZE 8
+#define HUFF_GARBAGE 3
+
+
+/**
+ * Funcao que realiza procedimentos para descompactacao de um arquivo
+ * 
+ */
 void descompactar()
 {
     char nomedoarquivo[50];
     printf("Entre com o nome do arquivo que deseja descompactar: ");
     scanf("%s", nomedoarquivo);
-    FILE *compactado = fopen(nomedoarquivo, "rb"); //Apenas leitura do arquivo em binário.
-    descompressao(compactado, nomedoarquivo);
+    FILE *compactado = fopen(nomedoarquivo, "rb"); // Apenas leitura do arquivo em binário.
+    descompressao(compactado);
 }
 
-int descompressao(FILE *compactado, char *nome)
+/**
+ * @brief Funcao que realiza a descompressão de um arquivo.
+ * 
+ * A funcao descompressao() receberá como parametro um ponteiro para um arquivo compactado
+ * e irá realizar o processo de descompactação de Huffman, gerando um novo arquivo descompactado
+ * com o nome informado.
+ * 
+ * @param   compactado  Um ponteiro para um arquivo compactado.
+ */
+int descompressao(FILE *compactado)
 {
 	int tamanho_arquivo = 0;
-	short tamanho_lixo, tamanho_arvore = 8191; //Valor máximo de 1 byte "11111111". 
+	short tamanho_lixo, tamanho_arvore = 8191; // Valor máximo de 1 byte "11111111". 
 	char nome_saida[50];
     unsigned char primeirobyte, segundobyte;
     NO *raiz = NULL;
@@ -31,13 +48,13 @@ int descompressao(FILE *compactado, char *nome)
     segundobyte = fgetc(compactado); // s_byte recebe o segundo byte do arquivo
     printf("\nProcesso em andamento...\n\n");
 	
-    tamanho_lixo = primeirobyte >> 5; // tamanho_lixo recebe os 3 bits de tamanho do lixo
+    tamanho_lixo = primeirobyte >> (BYTE_SIZE - HUFF_GARBAGE); // tamanho_lixo recebe os 3 bits de tamanho do lixo
 
-    tamanho_arvore = ((primeirobyte << 8) | segundobyte) & tamanho_arvore; // tamanho arvore vai receber o tamanho da arvore
+    tamanho_arvore = ((primeirobyte << BYTE_SIZE) | segundobyte) & tamanho_arvore; // tamanho arvore vai receber o tamanho da arvore
 
     raiz = montagem_arvore(compactado); // monta a arvore
 	fseek(compactado, tamanho_arvore + 2, SEEK_SET); // Escreve depois da arvore no novo arquivo
-	printar_byte(compactado, descompactado, raiz, tamanho_arvore, tamanho_lixo, (tamanho_arquivo-tamanho_arvore-2)); // Escreve tudo no arquivo
+	printar_byte(compactado, descompactado, raiz, tamanho_arvore, tamanho_lixo, (tamanho_arquivo - tamanho_arvore - 2)); // Escreve tudo no arquivo
 	fclose(compactado);
 	fclose(descompactado);
     printf("\nArquivo descompactado com sucesso!\n\n");
@@ -45,7 +62,13 @@ int descompressao(FILE *compactado, char *nome)
 
 }
 
-NO *montagem_arvore(FILE *compactado) //Reconstruir a árvore de huffman do arquivo compactado
+/**
+ * @brief Função que reconstrói a árvore de huffman do arquivo compactado
+ * 
+ * @param   compactado 
+ * @return  NO* 
+ */
+NO *montagem_arvore(FILE *compactado) 
 {
 	unsigned char atual;
     NO *novo_no;
@@ -69,11 +92,17 @@ NO *montagem_arvore(FILE *compactado) //Reconstruir a árvore de huffman do arqu
     return novo_no;
 }
 
+/**
+ * @brief 
+ * 
+ * @param caractere 
+ * @return NO* 
+ */
 NO *criar_no_arvore(unsigned char caractere)
 {
 	unsigned char *aux = (unsigned char *)malloc(sizeof(unsigned char));
     *aux = caractere;
-	NO *novo_no = (NO *)malloc(sizeof(NO));
+	NO *novo_no = (NO*)malloc(sizeof(NO));
     novo_no->frequencia = 0;
     novo_no->item = aux;
     novo_no->dir = NULL;
@@ -82,7 +111,18 @@ NO *criar_no_arvore(unsigned char caractere)
     return novo_no;
 }
 
-void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz, short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo) //Escreve o arquivo descompactado
+/**
+ * @brief 
+ * 
+ * @param   compactado          
+ * @param   descompactado       
+ * @param   raiz                
+ * @param   tamanho_arvore      
+ * @param   tamanho_lixo        
+ * @param   tamanho_arquivo     
+ */
+void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz,
+    short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo) //Escreve o arquivo descompactado
 {
     long int i, j, k;
 	unsigned char c;
