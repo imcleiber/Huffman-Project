@@ -1,7 +1,8 @@
 #include "descompactar.h"
 
-#define BYTE_SIZE 8
-#define HUFF_GARBAGE 3
+#define MAX_OUTPUT_SIZE 50
+#define BYTE_SIZE 8 // Tamanho de um byte
+#define HUFF_GARBAGE 3 // Tamanho do lixo 
 
 
 /**
@@ -29,8 +30,8 @@ void descompactar()
 int descompressao(FILE *compactado)
 {
 	int tamanho_arquivo = 0;
-	short tamanho_lixo, tamanho_arvore = 8191; // Valor máximo de 1 byte "11111111". 
-	char nome_saida[50];
+	short tamanho_lixo, tamanho_arvore = 8191; // 8191 = 11111 11111111
+	char nome_saida[MAX_OUTPUT_SIZE]; 
     unsigned char primeirobyte, segundobyte;
     NO *raiz = NULL;
     getchar();
@@ -50,7 +51,7 @@ int descompressao(FILE *compactado)
 	
     tamanho_lixo = primeirobyte >> (BYTE_SIZE - HUFF_GARBAGE); // tamanho_lixo recebe os 3 bits de tamanho do lixo
 
-    tamanho_arvore = ((primeirobyte << BYTE_SIZE) | segundobyte) & tamanho_arvore; // tamanho arvore vai receber o tamanho da arvore
+    tamanho_arvore = ((primeirobyte << 8) | segundobyte) & tamanho_arvore; // tamanho arvore vai receber o tamanho da arvore
 
     raiz = montagem_arvore(compactado); // monta a arvore
 	fseek(compactado, tamanho_arvore + 2, SEEK_SET); // Escreve depois da arvore no novo arquivo
@@ -64,6 +65,9 @@ int descompressao(FILE *compactado)
 
 /**
  * @brief Função que reconstrói a árvore de huffman do arquivo compactado
+ * 
+ * A função montagem_arvore() recebe como parâmetro um ponteiro para um arquivo compactado
+ * e irá reconstruir a árvore de huffman do arquivo compactado.
  * 
  * @param   compactado 
  * @return  NO* 
@@ -136,11 +140,11 @@ void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz,
         }
 		else
         {
-			k = 8;
+			k = 8; // 1 byte
         }
 		for (j = 0; j < k; ++j)
 		{
-			if(bit_esta_setado(c, 7 - j))
+			if(bit_esta_setado(c, 7 - j)) 
             {
 				atual = atual->dir;
             }
@@ -148,7 +152,7 @@ void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz,
             {
 				atual = atual->esq;
             }
-			if (atual->esq == NULL && atual->dir == NULL)//folha
+			if (atual->esq == NULL && atual->dir == NULL) //folha
             {
                 fprintf(descompactado, "%c", *(unsigned char*)atual->item);
                 atual = raiz;
