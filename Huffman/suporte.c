@@ -2,21 +2,6 @@
 
 //.............................FILA.............................//
 
-
-/**
- * @brief Cria uma struct NO (ADT) e retorna seu endereço. 
- * 
- * A função criar_no() aloca um espaço em memória para um NO,
- * e inicializa seus elementos. Atribuindo os valores item e frequencia
- * recebidos como parâmetros para os campos item e frequencia do NO.
- * Atribui NULL para os demais campos, prox, esq, e dir.
- * Retorna o ponteiro para o NO criado. 
- * 
- * @param   item            Dado a ser armazenado no NO
- * @param   frequencia      Frequência desse dado 
- * 
- * @return  NO*             Ponteiro para o NO criado
- */
 NO* criar_no(unsigned char item, int frequencia) //utilizado na criacao da arvore de huffman.
 {
     NO *novo_no = (NO*) malloc(sizeof(NO));
@@ -28,21 +13,13 @@ NO* criar_no(unsigned char item, int frequencia) //utilizado na criacao da arvor
     return novo_no;
 }
 
-/**
- * @brief Cria uma fila de prioridade vazia (ADT)
- * 
- * A função criar_fila() aloca um espaço em memória para uma FILA,
- * e inicializa o campo 'cabeca' atribuindo o valor NULL.
- * Retorna o ponteiro para a FILA criada.
- * 
- * @return   FILA*    Ponteiro para a fila criada.
- */
 FILA* criar_fila()
 {
     FILA *nova_fila = (FILA*) malloc(sizeof(FILA));
     nova_fila->cabeca = NULL;
     return nova_fila;
 }
+
 
 void enfileirar(FILA *fila, NO *no)
 {
@@ -74,10 +51,9 @@ NO* desenfileirar(FILA *fila)
     return auxiliar;
 }
 
-FILA* fila_prioridade(HT *ht, FILA *fila)//criacao da fila de prioridade, em ordem crescente.
+FILA* fila_prioridade(HT *ht, FILA *fila)
 {
-    int i;
-    for(i = 0; i < 256; i++)
+    for(int i = 0; i < 256; i++)
     {
         if(ht->tabela[i]->frequencia != 0)
         {
@@ -93,6 +69,7 @@ FILA* fila_prioridade(HT *ht, FILA *fila)//criacao da fila de prioridade, em ord
 
 
 //............................ARVORE............................//
+
 
 void criar_arvore_huffman(FILA *fila) // construcao da arvore com o uso da fila criada.
 {
@@ -167,6 +144,7 @@ HT* criar_hash_table()
     return nova_ht;
 }
 
+
 void adicionar_frequencia(FILE *arquivo, HT *ht)
 {   
     int num;
@@ -176,17 +154,19 @@ void adicionar_frequencia(FILE *arquivo, HT *ht)
     }
 }
 
+
 void adicionar_string(HT *ht, void *item, char *caminho)
 {
     int h = (unsigned char*)item;
     strcpy(ht->tabela[h]->caminho, caminho);//concatenacao do caminho.
 }
 
+
 void criar_caminho(NO *raiz_arvore, HT *ht, char *caminho, int contador)
 {
-    if(raiz_arvore->dir == NULL && raiz_arvore->esq == NULL)
-    { //folha
-        caminho[contador] = '\0';
+    if(raiz_arvore->dir == NULL && raiz_arvore->esq == NULL) // folha
+    {
+        caminho[contador] = '\0'; 
         adicionar_string(ht, raiz_arvore->item, caminho);
     }
     else
@@ -202,22 +182,28 @@ void criar_caminho(NO *raiz_arvore, HT *ht, char *caminho, int contador)
 
 //..........................AUXILIARES..........................//
 
+
 unsigned char setar_um_bit(unsigned char c, int i)
 {
-    unsigned char mask = 1 << i;
-    return mask | c;
+    unsigned char mask = 1 << i; // 1 = 00000001 << i = 00000010; 
+                                // Move o bit 1 i vezes para a esquerda. 
+
+    return mask | c; // 00000010 | 00000001 = 00000011; 
+                    // Seta o bit i para 1.
 }
+
 
 unsigned short setar_bits(unsigned short c, unsigned short *tamanho)
 {
-    unsigned short mask = *tamanho;
+    unsigned short mask = *tamanho; // 
     return mask | c;
 }
+
 
 int calcula_tamanho_lixo(HT *ht)//retorno para encabecamento.
 {
     int i, num_bits, soma_num_bits = 0;
-    for(i = 0; i < 256; i++)
+    for(i = 0; i < 256; i++) // 256 = tamanho da tabela ASCII. 
     {
         if(ht->tabela[i]->frequencia>0)
         {
@@ -229,25 +215,26 @@ int calcula_tamanho_lixo(HT *ht)//retorno para encabecamento.
     if((soma_num_bits % 8) == 0) 
         return 0;
 
-    return (8 - (soma_num_bits % 8));
+    return (8 - (soma_num_bits % 8)); 
 }
 
-void imprimir_bits(FILE *entrada, FILE *saida, HT *ht)//impressao da codificacao do arquivo.
+
+void imprimir_bits(FILE *entrada, FILE *saida, HT *ht) //impressao da codificacao do arquivo.
 {
     unsigned char aux, opcao = 0, c = 0;
     int i, contador = 0;
 
-    while( !feof(entrada))
+    while (!feof(entrada))
     {
         aux = fgetc(entrada);
-        for(i = 0; i < strlen(ht->tabela[aux]->caminho); i++)
+        for (i = 0; i < strlen(ht->tabela[aux]->caminho); i++)
         {
-            if(ht->tabela[aux]->caminho[i] == '1')
+            if (ht->tabela[aux]->caminho[i] == '1')
             {
                 opcao = setar_um_bit(opcao, 7 - contador);
             }
             contador++;
-            if(contador == 8)
+            if (contador == 8) // 8 = tamanho de um byte.
             {
                 fputc(opcao, saida);
                 contador = 0;
@@ -255,7 +242,7 @@ void imprimir_bits(FILE *entrada, FILE *saida, HT *ht)//impressao da codificacao
             }
         }
     }
-    if(contador != 0)
+    if (contador != 0)
     {
         fputc(opcao, saida);
     }
@@ -263,8 +250,11 @@ void imprimir_bits(FILE *entrada, FILE *saida, HT *ht)//impressao da codificacao
     fclose(saida);
 }
 
+
 bool bit_esta_setado(unsigned char c, int i)
 {
-    unsigned char mascara = 1 << i;
-    return mascara & c;
+    unsigned char mascara = 1 << i; // 1 = 00000001 << i = 00000010; 
+                                    // Move o bit 1 i vezes para a esquerda.
+    return mascara & c; // 00000010 & 00000001 = 00000000; 
+                        // Verifica se o bit i está setado.
 }
