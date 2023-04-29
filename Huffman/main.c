@@ -9,7 +9,7 @@
 int main()
 {
     int procedimento;
-    printf("Escolha o procedimento a ser realizado:\n0 - Compactar\n1 - Descompactar\n2 - Sair do programa\n");
+    printf("Escolha o procedimento a ser realizado:\n1 - Compactar\n2 - Descompactar\n3 - Sair do programa\n");
     scanf("%d", &procedimento);
     if(procedimento == 1)
     {
