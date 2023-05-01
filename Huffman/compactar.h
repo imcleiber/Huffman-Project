@@ -6,6 +6,13 @@
     #include <stdbool.h>
     #include "suporte.h"
 
-    //Realiza todo o procedimento para compactar, partindo do scanf ate a saida.
+    /**
+     * @brief Função que realiza todo o procedimento para compactar, da entrada à saída.
+     * 
+     * A função compactar() irá receber o nome do arquivo que deseja compactar e irá realizar
+     * todo o procedimento para compactar o arquivo, desde a leitura do arquivo até a escrita
+     * do arquivo compactado.
+     * 
+     */
     void compactar();
 #endif
