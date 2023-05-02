@@ -243,7 +243,7 @@
      * @param   i               Indíce do bit
      * @return  unsigned char   Char com o bit i setado para 1
      */
-    unsigned char setar_um_bit(unsigned char c, int i); 
+    unsigned char setar_um_bit(unsigned char byte, int indice); 
 
     /**
      * @brief Seta os bits de um char

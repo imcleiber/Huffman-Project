@@ -60,7 +60,7 @@ int descompressao(FILE *compactado)
     
 	fseek(compactado, tamanho_arvore + 2, SEEK_SET); // Escreve depois da header no novo arquivo
 
-	escrever_arquivo(compactado, descompactado, raiz, tamanho_arvore, tamanho_lixo, 
+	escrever_arquivo(compactado, descompactado, raiz, tamanho_lixo, 
         (tamanho_arquivo - tamanho_arvore - 2)); // Escreve tudo no arquivo
 
 	fclose(compactado);
@@ -71,22 +71,21 @@ int descompressao(FILE *compactado)
 
 }
 
-
 NO *montagem_arvore(FILE *compactado) 
 {
 	unsigned char atual;
     NO *novo_no;
     atual = fgetc(compactado);
-    //Utilizamos como condição de analise, valores referentes ao escape(item).
+    // Se for um nó interno, cria um nó com o caractere nulo
     if (atual == '*')
     {
     	novo_no = criar_no(atual, 0);
         novo_no->esq = montagem_arvore(compactado);
         novo_no->dir = montagem_arvore(compactado);
     }
-    else if (atual == '\\')
+    else if (atual == '\\') // se encontrar um \ (escape), pega o proximo byte
     {
-        atual = fgetc(compactado);
+        atual = fgetc(compactado); // pega o proximo byte que é o item que queremos
         novo_no = criar_no(atual, 0);
     }
     else
@@ -99,7 +98,7 @@ NO *montagem_arvore(FILE *compactado)
 
 
 void escrever_arquivo(FILE* compactado, FILE* descompactado, NO *raiz,
-    short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo_final) 
+                        short tamanho_lixo, int tamanho_arquivo_final) 
 {
 	unsigned char buffer;
 	NO *atual = raiz;

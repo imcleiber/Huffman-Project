@@ -46,12 +46,11 @@
      * para o arquivo descompactado, a raiz da árvore de huffman, o tamanho da árvore, o tamanho do lixo
      * e o tamanho do arquivo compactado. A função irá escrever o arquivo descompactado.
      * 
-     * @param       compactado          Ponteiro para o arquivo compactado
-     * @param       descompactado       Ponteiro para o arquivo descompactado
-     * @param       raiz                Raiz da árvore de huffman
-     * @param       tamanho_arvore      Tamanho da árvore de huffman
-     * @param       tamanho_lixo        Tamanho do lixo
-     * @param       tamanho_arquivo     Tamanho do arquivo compactado
+     * @param       compactado              Ponteiro para o arquivo compactado
+     * @param       descompactado           Ponteiro para o arquivo descompactado
+     * @param       raiz                    Raiz da árvore de huffman
+     * @param       tamanho_lixo            Tamanho do lixo
+     * @param       tamanho_arquivo_final   Tamanho do arquivo compactado
      */
-    void escrever_arquivo(FILE* compactado, FILE* descompactado, NO *raiz, short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo);
+    void escrever_arquivo(FILE* compactado, FILE* descompactado, NO *raiz, short tamanho_lixo, int tamanho_arquivo_final);
 #endif

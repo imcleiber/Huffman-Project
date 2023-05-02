@@ -6,8 +6,8 @@ void compactar()
 {
     char nome_do_arquivo[MAX_FILENAME_SIZE]; //nome do arquivo a ser compactado. 
     char caminho[ALTURA_MAX]; // 
-    int header; // cabecalho do arquivo compactado.
-    int aux_byte_header; // auxiliar para a criacao do cabecalho.
+    short header; // cabecalho do arquivo compactado.
+    unsigned char f_byte, s_byte; // primeiro e segundo byte do cabecalho.
     unsigned short tamanho_lixo; // quantidade de bits que nao serao utilizados no ultimo byte.
                                 // ocupa 3 bits no cabecalho.
     unsigned short tamanho_arvore = 0; // tamanho da arvore de huffman.
@@ -54,9 +54,10 @@ void compactar()
     calcula_tamanho_arvore(arvore, &tamanho_arvore);
 
     // Cria o cabecalho (header):
-    header = tamanho_lixo; 
+    header = tamanho_lixo; // seta os 3 primeiros bits do cabecalho.
     header = header << 13; 
     header = setar_bits(header, &tamanho_arvore); // concatena os bits do lixo com o tamanho da arvore
+    
 
     // Abertura do arquivo de saida:
     *nome_do_arquivo = *strtok(nome_do_arquivo, "."); // separa o nome do arquivo da extensao.
@@ -64,15 +65,16 @@ void compactar()
     FILE *saida = fopen(nome_do_arquivo, "wb"); // abre o arquivo de saida.
 
     // Separa em dois bytes o inteiro e escreve no arquivo
-    aux_byte_header = header >> 8; // seta os 8 primeiros bits do cabecalho. 
-    fputc(aux_byte_header, saida); // imprime o primeiro byte do cabecalho.
-    fputc(header, saida); // imprime o segundo byte do cabecalho.
+    f_byte = header >> 8; // seta os 8 primeiros bits do cabecalho. 
+    s_byte = header; // seta os 8 ultimos bits do cabecalho.
+    fputc(f_byte, saida); // imprime o primeiro byte do cabecalho.
+    fputc(s_byte, saida); // imprime o segundo byte do cabecalho.
 
     // Imprime a arvore de huffman no arquivo de saida.
     imprimir_pre_ordem(saida, arvore); 
 
                 // 2 bytes do lixo e tamanho da arvore + arvore
-    fseek(saida, (2 + tamanho_arvore), SEEK_SET); // Desloca o ponteiro do arquivo para após o cabecalho.
+    fseek(saida, (2 + tamanho_arvore), SEEK_SET); // Desloca o ponteiro do arquivo para após a árvore.
 
     // Imprime o arquivo compactado no arquivo de saida.
     imprimir_bits(arquivo, saida, ht); 
