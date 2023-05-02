@@ -1,7 +1,7 @@
 library(readr)
 library(knitr)
 
-dadosplot <- read_csv("AD_avl.csv")
+dadosplot <- read_csv("contagem.csv")
 
 AVL <- dadosplot$AVL
 AD <- dadosplot$AD
