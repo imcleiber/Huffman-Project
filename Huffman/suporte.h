@@ -4,8 +4,6 @@
     #include <string.h>
     #include <stdlib.h>
     #include <stdbool.h>
-    #include "compactar.h"
-    #include "descompactar.h"
     #define MAX 256
     #define ALTURA_MAX 31
 
@@ -116,7 +114,7 @@
     /**
      * @brief Monta a fila de prioridade
      * 
-     * A função fila_prioridade() recebe como parâmetro uma HT e uma FILA.
+     * A função montar_fila_prioridade() recebe como parâmetro uma HT e uma FILA.
      * Percorre a tabela de frequência da HT e para cada posição que não for
      * nula, cria um NO com o caracter correspondente e sua frequência, e
      * enfileira esse NO na FILA. Retorna a FILA montada.
@@ -125,7 +123,7 @@
      * @param   fila    Ponteiro para uma fila de prioridade (FILA)
      * @return  FILA*   Ponteiro para a fila de prioridade montada
      */
-    FILA* fila_prioridade(HT *ht, FILA *fila); 
+    FILA* montar_fila_prioridade(HT *ht, FILA *fila); 
 
     /**
      * @brief Cria uma árvore de Huffman
@@ -210,9 +208,9 @@
      * caracter e um caminho. Atribui o caminho ao campo caminho do elemento
      * da hash table correspondente ao caracter.
      * 
-     * @param ht 
-     * @param item 
-     * @param caminho 
+     * @param   ht          Ponteiro para a hash table
+     * @param   item        Ponteiro para o caracter
+     * @param   caminho     Ponteiro para o caminho 
      */
     void adicionar_string(HT *ht, void *item, char *caminho); 
 
@@ -224,10 +222,10 @@
      * atribui o caminho ao caracter correspondente na hash table. Se não,
      * atribui '0' ao caminho e chama a função recursivamente para o filho
      * 
-     * @param raiz_arvore 
-     * @param ht 
-     * @param caminho 
-     * @param contador 
+     * @param   raiz_arvore     
+     * @param   ht              
+     * @param   caminho 
+     * @param   contador 
      */
     void criar_caminho(NO *raiz_arvore, HT *ht, char *caminho, int contador); 
 
@@ -265,8 +263,10 @@
      * @brief Calcula o tamanho do lixo
      * 
      * A função calcula_tamanho_lixo() recebe como parâmetro uma hash table.
-     * Calcula o tamanho do lixo, que é o resto da divisão da soma do número
-     * de bits de cada caracter pelo número de bits de um byte.
+     * Calcula o tamanho do LIXO, que é o resto da divisão da soma do número
+     * de bits de cada caracter comprimido pelo número de bits de um byte (8).
+     * 
+     * LIXO: quantidade de bits que não são utilizados no último byte do arquivo comprimido 
      * 
      * @param   ht      Ponteiro para a hash table
      * @return  int     Tamanho do lixo
@@ -281,29 +281,12 @@
      * arquivo de entrada, lê um caracter do arquivo de entrada e imprime os
      * bits correspondentes ao caminho na árvore do caracter no arquivo de saída.
      * 
-     * @param entrada 
-     * @param saida 
-     * @param ht 
+     * @param   entrada     Ponteiro para o arquivo de entrada
+     * @param   saida       Ponteiro para o arquivo de saída
+     * @param   ht          Ponteiro para a hash table
      */
     void imprimir_bits(FILE *entrada, FILE *saida, HT *ht); 
     
-
-    //DESCOMPACTAR - FUNCOES
-
-    //Realiza as chamadas das funções para descompactar.
-    void descompactar();
-
-    //Realiza a descompressão propriamente dita.
-    int descompressao(FILE *compactado);
-
-    //Monta a árvore a partir do arquivo compactado.
-    NO *montagem_arvore(FILE *compactado);
-
-    //Cria um NO com um caractere inserido.
-    NO *criar_no_arvore(unsigned char caractere);
-
-    //Escreve o arquivo descompactado
-    void printar_byte(FILE* compactado, FILE* descompactado, NO *raiz, short tamanho_arvore, short tamanho_lixo, int tamanho_arquivo);
 
     /**
      * @brief Verifica se um bit i do char c está setado
