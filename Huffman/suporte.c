@@ -88,7 +88,7 @@ void criar_arvore_huffman(FILA *fila) // construcao da arvore com o uso da fila 
         NO *novo_no = (NO*) malloc(sizeof(NO));
 
         // o novo no recebe o caracter * e a soma das frequencias dos dois nos desenfileirados.
-        novo_no->item = (void*)'*'; //escape *.
+        novo_no->item = (void*)'*'; // representa um no interno.
         novo_no->frequencia = (no_1->frequencia + no_2->frequencia);
         novo_no->esq = no_1;
         novo_no->dir = no_2;
@@ -130,17 +130,18 @@ void imprimir_pre_ordem(FILE *arquivo, NO *raiz_arvore)
 {
     if(raiz_arvore != NULL)
     {
+        // Se o no for uma folha e o caracter for especial, imprime o caracter de escape antes do caracter.
         if(((int)(unsigned char*)(raiz_arvore->item) == '\\' || (int)(unsigned char*)(raiz_arvore->item) == '*') 
             && raiz_arvore->dir == NULL && raiz_arvore->esq == NULL)
-        { //folha
+        { // folha e caracter especial = '\*' ou '\\'.  \* = asterisco e \\ = barra invertida. 
             fputc('\\', arquivo); // imprime o caracter de escape.
         }
-        fputc((int)(char*)(raiz_arvore->item), arquivo); // imprime o caracter.
+        fputc((int)(char*)(raiz_arvore->item), arquivo); // imprime o caracter. 
 
         // chama a funcao recursivamente para a esquerda e para a direita
         // até que todos os nos sejam percorridos.
         imprimir_pre_ordem(arquivo, raiz_arvore->esq);
-        imprimir_pre_ordem(arquivo, raiz_arvore->dir);
+        imprimir_pre_ordem(arquivo, raiz_arvore->dir); 
     }
 }
 
@@ -211,12 +212,12 @@ void criar_caminho(NO *raiz_arvore, HT *ht, char *caminho, int contador)
 //..........................AUXILIARES..........................//
 
 
-unsigned char setar_um_bit(unsigned char c, int i)
+unsigned char setar_um_bit(unsigned char byte, int indice)
 {
-    unsigned char mask = 1 << i; // 1 = 00000001 << i = 00000010; 
-                                // Move o bit 1 i vezes para a esquerda. 
+    unsigned char mask = 1 << indice; // 1 = 00000001 << indice = 00000010; 
+                                // Move o bit 1 indice vezes para a esquerda. 
 
-    return mask | c; // 00000010 | 00000001 = 00000011; 
+    return mask | byte; // 00000010 | 00000001 = 00000011; 
                     // Seta o bit i para 1.
 }
 

@@ -49,8 +49,8 @@ void test_desenfileirar() {
     enfileirar(queue, node1);
     enfileirar(queue, node2);
     NO* dequeued_node = desenfileirar(queue);
-    CU_ASSERT_PTR_EQUAL(dequeued_node, node1);
-    CU_ASSERT_PTR_EQUAL(queue->cabeca, node2);
+    CU_ASSERT_PTR_EQUAL(dequeued_node, node1); // Check if the dequeued node is the first node
+    CU_ASSERT_PTR_EQUAL(queue->cabeca, node2); // Check if the queue's head is the second node
     dequeued_node = desenfileirar(queue);
     CU_ASSERT_PTR_EQUAL(dequeued_node, node2);
     CU_ASSERT_PTR_NULL(queue->cabeca);
@@ -59,7 +59,7 @@ void test_desenfileirar() {
 void test_hash_table() {
     // Test creating a hash table
     HT* hash_table = (HT*) malloc(sizeof(HT));
-    CU_ASSERT_PTR_NOT_NULL(hash_table);
+    CU_ASSERT_PTR_NOT_NULL(hash_table); // Check if the hash table was created
     for (int i = 0; i < 256; i++) {
         CU_ASSERT_PTR_NULL(hash_table->tabela[i]);
     }
