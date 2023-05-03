@@ -8,7 +8,7 @@ Professor: Marcio Ribeiro<br />
 
 <h1 align="left"> HUFFMAN </h1>
 Algoritmo de Huffman para compactação e descompactação de arquivos<br />
-Arquivos documentados no formato JavaDoc<br />
+Códigos documentados no formato JavaDoc<br />
 Para utilizar compile e execute o arquivo "main.c" na pasta "Huffman"<br />
 <br />
 
